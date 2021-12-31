@@ -164,7 +164,7 @@ options =
     grid: {
         drawGridLines: true,        // whether to draw lines across the grid or not.
         gridLineColor: '#cccccc'    // Color of the grid lines.
-        background: '#fffdf6',      // CSS color spec for background color of grid.
+        background: '#060606',      // CSS color spec for background color of grid.
         borderColor: '#999999',     // CSS color spec for border around grid.
         borderWidth: 2.0,           // pixel width of border around grid.
         shadow: true,               // draw a shadow for grid.

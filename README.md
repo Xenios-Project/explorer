@@ -1,56 +1,78 @@
-Iquidus Explorer - 1.7.4
+XNC Explorer - 1.7.4
 ================
 
-An open source block explorer written in node.js.
+Fork of the open source iquidus block explorer written in node.js. 
 
-### See it in action
+**Note** First sync needs to complete for the top100 to work.
 
-*  [List of live explorers running Iquidus](https://github.com/iquidus/explorer/wiki/Live-Explorers)
-
-
-*Note: If you would like your instance mentioned here contact me*
-
-### Requires
+### Requirements
 
 *  node.js >= 8.17.0 (12.14.0 is advised for updated dependencies)
 *  mongodb 4.2.x
 *  *coind
 
-### Create database
+### Setup
+#### Install Requirements (ubuntu 18LTS)
+```
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+sudo apt-get update
+sudo apt install nodejs mongodb-org -y
+sudo systemctl stop mongod.service
+sudo systemctl start mongod.service
+sudo systemctl enable mongod.service
+```
+
+#### Create database
+
+Generate secure password:
+
+    > db_password=$(cat /dev/urandom | tr -dc a-zA-Z0-9%^@\!$ | fold -w 36 | head -n 1)
 
 Enter MongoDB cli:
 
     $ mongo
 
-Create databse:
+Create databse/user:
 
-    > use explorerdb
+    echo -e 'use explorerdb' > /tmp/mongo.js
+    echo -e "db.createUser( { user: \"iquidus\", pwd: \"${db_password}\", roles: [ \"readWrite\" ] } )" >> /tmp/mongo.js
+    mongo < /tmp/mongo.js
 
-Create user with read/write access:
+#### Get the source
 
-    > db.createUser( { user: "iquidus", pwd: "3xp!0reR", roles: [ "readWrite" ] } )
+    git clone https://github.com/Xenios-Project/explorer explorer
 
-*Note: If you're using mongo shell 4.2.x, use the following to create your user:
-
-    > db.addUser( { user: "username", pwd: "password", roles: [ "readWrite"] })
-
-### Get the source
-
-    git clone https://github.com/iquidus/explorer explorer
-
-### Install node modules
+#### Install node modules
 
     cd explorer && npm install --production
 
 ### Configure
+Configure settings.json
 
-    cp ./settings.json.template ./settings.json
+*This should cover it, but make required changes in settings.json*
+```
+cp ./settings.json.template ./settings.json
+xncpass=$(grep -Po '(?<=rpcpassword=).*' ~/.xenios/xenios.conf)
+rpcuser=$(grep -Po '(?<=rpcuser=).*' ~/.xenios/xenios.conf)
+sed "s/wallet_user_placeholder/$rpcuser/" -i ./settings.json
+sed "s/wallet_password_placeholder/$xncpass/" -i ./settings.json
+sed "s/mongo_password_placeholder/$db_password/" -i ./settings.json
+```
 
-*Make required changes in settings.json*
+Setup crontab (should be run from explorer root directory. Otherwise edit the paths)
+```
+sudo -s -- <<EOF
+(crontab -l 2>/dev/null; echo "*/1 * * * * cd $(pwd) && /usr/bin/nodejs scripts/sync.js index update > /dev/null 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "*/2 * * * * cd $(pwd) && /usr/bin/nodejs scripts/sync.js market > /dev/null 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "*/5 * * * * cd $(pwd) && /usr/bin/nodejs scripts/peers.js > /dev/null 2>&1") | crontab -
+EOF
+```
 
 ### Start Explorer
 
-    npm start
+    screen -S explorer
+    (npm start &)
 
 *Note: mongod must be running to start the explorer*
 
@@ -66,7 +88,7 @@ To stop the cluster you can use
 
 sync.js (located in scripts/) is used for updating the local databases. This script must be called from the explorers root directory.
 
-    Usage: node scripts/sync.js [database] [mode]
+    Usage:   [database] [mode]
 
     database: (required)
     index [mode] Main index: coin info/stats, transactions & addresses
@@ -96,9 +118,7 @@ sync.js (located in scripts/) is used for updating the local databases. This scr
 
 ### Wallet
 
-Iquidus Explorer is intended to be generic, so it can be used with any wallet following the usual standards. The wallet must be running with atleast the following flags
-
-    -daemon -txindex
+`xeniosd` must be running.
     
 ### Security
 
@@ -110,8 +130,7 @@ Ensure mongodb is not exposed to the outside world via your mongo config or a fi
 
 If you receive this message when launching the sync script either a) a sync is currently in progress, or b) a previous sync was killed before it completed. If you are certian a sync is not in progress remove the index.pid and db_index.pid from the tmp folder in the explorer root directory.
 
-    rm tmp/index.pid
-    rm tmp/db_index.pid
+    rm tmp/*
 
 **exceeding stack size**
 
