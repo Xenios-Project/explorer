@@ -13,6 +13,7 @@
     "bitcoin-node-api": "git+http://git@github.com/uaktags/Bitcoin-Node-Api.git",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
+    "cross-fetch": "^3.1.4",
     "debug": "~4.1.1",
     "express": "~4.17.1",
     "intl": "^1.2.5",

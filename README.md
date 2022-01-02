@@ -29,10 +29,6 @@ Generate secure password:
 
     > db_password=$(cat /dev/urandom | tr -dc a-zA-Z0-9%^@\!$ | fold -w 36 | head -n 1)
 
-Enter MongoDB cli:
-
-    $ mongo
-
 Create databse/user:
 
     echo -e 'use explorerdb' > /tmp/mongo.js
