@@ -189,7 +189,7 @@ is_locked(function(exists) {
                                         db.update_richlist('received', function() {
                                             db.update_richlist('balance', function() {
                                                 db.get_stats(settings.coin, function(nstats) {
-                                                    db.update_last_price(mkt, function(err) {
+                                                    db.update_last_price(function(err) {
                                                         console.log('update complete (block: %s)', nstats.last);
                                                         exit();
                                                     });
