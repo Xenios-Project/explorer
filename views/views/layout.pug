@@ -144,12 +144,12 @@ html
                 span.menu-text #{settings.locale.menu_movement}
           if settings.display.network == true
             li#network
-              a.nav-link(href='/network')
+              a.nav-link(href='/nodes')
                 span.fa.fa-share-alt
                 span.menu-text #{settings.locale.menu_network}
           if settings.display.richlist == true
             li#richlist
-              a.nav-link(href='/richlist')
+              a.nav-link(href='/whalewallets')
                 span.fa.fa-btc
                 span.menu-text #{settings.locale.menu_richlist}
           if settings.display.markets == true
@@ -159,7 +159,7 @@ html
                 span.menu-text #{settings.locale.menu_markets}
           if settings.display.api == true
             li#info
-              a.nav-link(href='/info')
+              a.nav-link(href='/api-info')
                 span.fa.fa-info-circle
                 span.menu-text #{settings.locale.menu_api}
     .col-md-12
@@ -272,7 +272,7 @@ html
         ul.nav.justify-content-center
           li.text-center(style='margin-left:80px;margin-right:80px;')
             p(style='')
-              a.nav-link.poweredby(href='https://github.com/iquidus/explorer', target='_blank') Powered by Iquidus Explorer v#{settings.iquidus_version}
+              a.nav-link.poweredby(href='https://xenioscoin.gr/', target='_blank') Powered by Xenios
       .col-md-4.navbar-nav
         ui.nav.justify-content-end
           label#lblBlockcount.badge.badge-pill.nav-link

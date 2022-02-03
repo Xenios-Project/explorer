@@ -134,7 +134,7 @@ router.get('/', function(req, res) {
     route_get_index(res, null);
 });
 
-router.get('/info', function(req, res) {
+router.get('/api-info', function(req, res) {
     res.render('info', { active: 'info', address: settings.address, hashes: settings.api });
 });
 
@@ -161,7 +161,7 @@ router.get('/markets/:market', function(req, res) {
     }
 });
 
-router.get('/richlist', function(req, res) {
+router.get('/whalewallets', function(req, res) {
     if (settings.display.richlist == true) {
         db.get_stats(settings.coin, function(stats) {
             db.get_richlist(settings.coin, function(richlist) {
@@ -198,7 +198,7 @@ router.get('/movement', function(req, res) {
     res.render('movement', { active: 'movement', flaga: settings.movement.low_flag, flagb: settings.movement.high_flag, min_amount: settings.movement.min_amount });
 });
 
-router.get('/network', function(req, res) {
+router.get('/nodes', function(req, res) {
     res.render('network', { active: 'network' });
 });
 

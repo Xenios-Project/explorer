@@ -5,7 +5,7 @@
 */
 {
   // name your instance!
-  "title": "XENIOS",
+  "title": "XENIOS COIN",
 
   "address": "blockexplorer.xenioscoin.com",
 
@@ -104,7 +104,7 @@
   //default market is loaded by default and determines last price in header
   "markets": {
     "coin": "XNC",
-    "exchange": "XNC",
+    "exchange": "EUR",
     "enabled": ["bittrex"],
     "cryptopia_id": "1658",
     "ccex_key" : "Get-Your-Own-Key",
